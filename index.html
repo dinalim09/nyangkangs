@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Nyang-Suite 0.5 — 화캉스 by HWAKANCE HOTEL</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+KR:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ════════════════════════════════
+       SCENE 1 · CHECK-IN
+  ════════════════════════════════ -->
+  <section id="scene-checkin" class="scene active">
+    <div class="hotel-letterhead">
+      <p class="hotel-label">HWAKANCE HOTEL</p>
+      <h1 class="hotel-title">Nyang-Suite<span class="hotel-title-num"> 0.5</span></h1>
+      <p class="hotel-sub">0.5평의 프라이빗 스위트</p>
+    </div>
+
+    <div class="checkin-card glass">
+      <p class="card-eyebrow">GUEST CHECK-IN</p>
+      <p class="card-desc">
+        지금 이 문 안은<br>
+        당신 전용 구역입니다.
+      </p>
+      <div class="cat-ascii checkin-cat">
+        ( ˘ ᆺ ˘ )<br>
+        <span class="paw">ﾉ　 ﾉ</span>
+      </div>
+      <p class="card-hint">고양이 어메니티가 대기 중입니다.</p>
+      <button id="btn-checkin" class="btn-primary">CHECK IN</button>
+    </div>
+
+    <p class="footer-legal">Standard stay: 3 min &nbsp;|&nbsp; No late checkout</p>
+  </section>
+
+
+  <!-- ════════════════════════════════
+       SCENE 2 · STAY (메인 인터랙션)
+  ════════════════════════════════ -->
+  <section id="scene-stay" class="scene">
+
+    <!-- 타이머 바 -->
+    <div id="timer-bar-wrap">
+      <div id="timer-bar"></div>
+      <span id="timer-label">03:00</span>
+    </div>
+
+    <!-- 고양이 인터랙션 영역 -->
+    <div id="cat-stage">
+      <div id="cat-container">
+        <div id="cat-ascii-main" class="cat-ascii">
+          ( ˘ ᆺ ˘ )
+        </div>
+        <div id="cat-body">
+          ∫  ∫
+        </div>
+      </div>
+    </div>
+
+    <!-- 상태 팝업 (JS가 동적 생성) -->
+    <div id="popup-layer" aria-live="polite"></div>
+
+    <!-- 하단 힌트 -->
+    <div id="interaction-hint" class="glass">
+      <span>쓰다듬기</span>
+      <span class="hint-sep">·</span>
+      <span>빠른 터치</span>
+      <span class="hint-sep">·</span>
+      <span>꾹 누르기</span>
+    </div>
+
+  </section>
+
+
+  <!-- ════════════════════════════════
+       SCENE 3 · CHECK-OUT (영수증)
+  ════════════════════════════════ -->
+  <section id="scene-checkout" class="scene">
+    <!-- 롤휴지 영수증 -->
+    <div id="receipt" class="receipt-paper">
+
+      <!-- 섹션 1: 호텔 헤더 -->
+      <div class="receipt-section receipt-header">
+        <p class="receipt-hotel-name">HWAKANCE HOTEL</p>
+        <p class="receipt-ornament">— ✦ —</p>
+        <p class="receipt-suite-title">[ 0.5평 냥-스위트 체크아웃 ]</p>
+      </div>
+
+      <div class="perforation"></div>
+
+      <!-- 섹션 2: 서비스 정보 -->
+      <div class="receipt-section receipt-service">
+        <div class="receipt-row">
+          <span class="r-key">Service</span>
+          <span class="r-val">Cat Synchronization</span>
+        </div>
+        <div class="receipt-row">
+          <span class="r-key">Duration</span>
+          <span class="r-val" id="receipt-duration">03:00</span>
+        </div>
+        <div class="receipt-row">
+          <span class="r-key">Status</span>
+          <span class="r-val">Fully Recharged</span>
+        </div>
+      </div>
+
+      <div class="perforation"></div>
+
+      <!-- 섹션 3: 수치 (JS가 채움) -->
+      <div class="receipt-section receipt-stats" id="receipt-stats">
+        <!-- JS: Clean-up, Empathy, Stress 행 삽입 -->
+      </div>
+
+      <div class="perforation"></div>
+
+      <!-- 섹션 4: 클로징 -->
+      <div class="receipt-section receipt-closing">
+        <p class="receipt-quote">"인간, 다시 갓생 살 준비 됐나?"</p>
+        <p class="cat-stamp">( ♡ ᆺ ♡ )</p>
+        <p class="cat-stamp-label">[ 고양이 발바닥 도장 ]</p>
+        <p class="receipt-date" id="receipt-date"></p>
+      </div>
+
+      <!-- 하단 절취 지그재그 -->
+      <div class="receipt-tear"></div>
+
+    </div>
+
+    <div class="checkout-actions">
+      <button id="btn-save" class="btn-secondary">영수증 저장</button>
+      <button id="btn-restart" class="btn-ghost">재입실</button>
+    </div>
+  </section>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

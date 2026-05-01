@@ -1,0 +1,622 @@
+/* ══════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════ */
+:root {
+  --gold:         #C9A84C;
+  --gold-light:   #E8D5A3;
+  --gold-dark:    #8B6914;
+  --navy:         #0D1B2A;
+  --navy-light:   #1A2E45;
+  --cream:        #F5F0E8;
+  --glass-bg:     rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(201, 168, 76, 0.22);
+
+  --font-serif: 'Cormorant Garamond', 'Noto Serif KR', Georgia, serif;
+  --font-mono:  'Courier New', Courier, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ══════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-serif);
+  background: var(--navy);
+  color: var(--cream);
+  min-height: 100dvh;
+}
+
+/* Luxury background gradient */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 60%, rgba(201,168,76,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 15%, rgba(26,46,69,0.9) 0%, transparent 55%),
+    linear-gradient(160deg, var(--navy) 0%, var(--navy-light) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ══════════════════════════════════════
+   SCENE MANAGEMENT
+══════════════════════════════════════ */
+.scene {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.55s var(--ease-out-expo),
+              visibility 0.55s var(--ease-out-expo);
+  z-index: 1;
+}
+
+.scene.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ══════════════════════════════════════
+   GLASSMORPHISM UTILITY
+══════════════════════════════════════ */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ══════════════════════════════════════
+   SCENE 1 · CHECK-IN
+══════════════════════════════════════ */
+#scene-checkin {
+  gap: 2rem;
+}
+
+.hotel-letterhead {
+  text-align: center;
+}
+
+.hotel-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.38em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+.hotel-title {
+  font-size: clamp(2.6rem, 10vw, 4.5rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--cream);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.hotel-title-num {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.hotel-sub {
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  color: rgba(245, 240, 232, 0.45);
+  margin-top: 0.8rem;
+}
+
+/* Check-in card */
+.checkin-card {
+  width: min(340px, 90vw);
+  border-radius: 1px;
+  padding: 2rem 1.75rem;
+  text-align: center;
+}
+
+.card-eyebrow {
+  font-size: 0.58rem;
+  letter-spacing: 0.42em;
+  color: var(--gold);
+  margin-bottom: 1.25rem;
+}
+
+.card-desc {
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--cream);
+  margin-bottom: 1.5rem;
+}
+
+.cat-ascii {
+  font-family: var(--font-mono);
+  line-height: 1.5;
+  color: var(--gold-light);
+}
+
+.checkin-cat {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.paw {
+  font-size: 0.85em;
+  opacity: 0.6;
+}
+
+.card-hint {
+  font-size: 0.72rem;
+  color: rgba(245, 240, 232, 0.42);
+  letter-spacing: 0.06em;
+  margin-bottom: 1.75rem;
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-block;
+  padding: 0.72rem 2.6rem;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: var(--font-serif);
+  font-size: 0.72rem;
+  letter-spacing: 0.38em;
+  cursor: pointer;
+  transition: background 0.22s, color 0.22s;
+}
+
+.btn-primary:hover,
+.btn-primary:active {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.footer-legal {
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  color: rgba(245, 240, 232, 0.28);
+}
+
+/* ══════════════════════════════════════
+   SCENE 2 · STAY
+══════════════════════════════════════ */
+#scene-stay {
+  justify-content: space-between;
+  padding: 0;
+}
+
+/* ─── Timer bar ─── */
+#timer-bar-wrap {
+  width: 100%;
+  padding: 1rem 1.5rem 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+#timer-bar {
+  flex: 1;
+  height: 1px;
+  background: rgba(201, 168, 76, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+#timer-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--gold-dark), var(--gold));
+  transform-origin: left center;
+  transform: scaleX(var(--progress, 1));
+  transition: transform 1s linear;
+}
+
+#timer-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  min-width: 3rem;
+  text-align: right;
+}
+
+/* ─── Cat stage ─── */
+#cat-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;  /* Matter.js canvas anchor */
+  touch-action: none;
+  overflow: hidden;
+}
+
+#cat-container {
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+  touch-action: none;
+  padding: 3rem;
+  position: relative;
+  z-index: 1;          /* ASCII art above physics canvas */
+}
+
+#cat-ascii-main {
+  font-family: var(--font-mono);
+  font-size: clamp(2rem, 9vw, 3.2rem);
+  color: var(--gold-light);
+  line-height: 1.3;
+  transition: transform 0.12s, color 0.18s;
+}
+
+#cat-body {
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 4.5vw, 1.6rem);
+  color: rgba(201, 168, 76, 0.45);
+  letter-spacing: 0.6em;
+  margin-top: 0.25rem;
+  transition: transform 0.12s;
+}
+
+/* ─── Status popups ─── */
+#popup-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.status-popup {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: bold;
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(201, 168, 76, 0.55);
+  white-space: nowrap;
+  animation: popup-float 1.25s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes popup-float {
+  0%   { opacity: 1;   transform: translateY(0)      scale(1); }
+  55%  { opacity: 1;   transform: translateY(-1.8rem) scale(1.08); }
+  100% { opacity: 0;   transform: translateY(-3.2rem) scale(0.88); }
+}
+
+/* ─── Interaction hint ─── */
+#interaction-hint {
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: rgba(245, 240, 232, 0.38);
+}
+
+.hint-sep {
+  color: var(--gold-dark);
+  opacity: 0.7;
+}
+
+/* ══════════════════════════════════════
+   SCENE 3 · CHECK-OUT
+══════════════════════════════════════ */
+#scene-checkout {
+  justify-content: flex-start;
+  padding-top: 2rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ──────────────────────────────────
+   TOILET PAPER RECEIPT
+────────────────────────────────── */
+.receipt-paper {
+  width: min(290px, 84vw);
+  background: #fff;
+  color: #222;
+  position: relative;
+  /*
+   * 양옆 세로 그림자 → 돌돌 말린 휴지가 풀린 입체감
+   * 왼쪽/오른쪽 가장자리가 살짝 말려 있는 느낌
+   */
+  box-shadow:
+    -16px 0 20px -4px rgba(0, 0, 0, 0.38),
+     16px 0 20px -4px rgba(0, 0, 0, 0.38),
+    -6px  0 8px  -2px rgba(0, 0, 0, 0.18),
+     6px  0 8px  -2px rgba(0, 0, 0, 0.18),
+     0    6px 24px    rgba(0, 0, 0, 0.22);
+}
+
+/* 체크아웃 씬이 active 될 때만 언롤 애니메이션 재생 */
+#scene-checkout.active .receipt-paper {
+  animation: unroll 1.4s var(--ease-out-expo) both;
+}
+
+@keyframes unroll {
+  from {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0.5;
+  }
+  to {
+    /* 하단 지그재그를 가리지 않도록 여유 */
+    clip-path: inset(0 0 -24px 0);
+    opacity: 1;
+  }
+}
+
+/* ─── 섹션 공통 ─── */
+.receipt-section {
+  padding: 1.15rem 1.35rem;
+}
+
+/* ─── 절취선 (perforation) ─── */
+.perforation {
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    #c8c8c8 0px,
+    #c8c8c8 5px,
+    transparent 5px,
+    transparent 11px
+  );
+  position: relative;
+}
+
+/* 절취 구멍 느낌: 양 끝 작은 원 */
+.perforation::before,
+.perforation::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--navy);
+}
+.perforation::before { left:  -3.5px; }
+.perforation::after  { right: -3.5px; }
+
+/* ─── 지그재그 뜯긴 하단 ─── */
+.receipt-tear {
+  display: block;
+  width: 100%;
+  height: 20px;
+  /* 아래 방향 삼각형 톱니 → 뜯어낸 휴지 실루엣 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpolygon points='0,0 10,20 20,0' fill='%23ffffff'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 20px 20px;
+  background-position: bottom;
+}
+
+/* ─── 섹션 1: 호텔 헤더 ─── */
+.receipt-header {
+  text-align: center;
+  padding-bottom: 1rem;
+}
+
+.receipt-hotel-name {
+  font-family: var(--font-serif);
+  font-size: 0.72rem;
+  letter-spacing: 0.38em;
+  color: #555;
+  margin-bottom: 0.4rem;
+}
+
+.receipt-ornament {
+  font-size: 0.7rem;
+  color: #C9A84C;
+  margin: 0.2rem 0 0.4rem;
+  letter-spacing: 0.15em;
+}
+
+.receipt-suite-title {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  font-style: italic;
+  color: #222;
+  line-height: 1.4;
+}
+
+/* ─── 섹션 2 & 3: 모노스페이스 데이터 행 ─── */
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #333;
+  margin-bottom: 0.38rem;
+}
+
+.receipt-row:last-child {
+  margin-bottom: 0;
+}
+
+.r-key {
+  color: #888;
+  flex-shrink: 0;
+}
+
+.r-val {
+  text-align: right;
+  color: #222;
+}
+
+.r-val.positive { color: #2a7a3b; }
+.r-val.negative { color: #b03020; }
+
+/* ─── 섹션 4: 클로징 ─── */
+.receipt-closing {
+  text-align: center;
+}
+
+.receipt-quote {
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  font-style: italic;
+  color: #333;
+  line-height: 1.65;
+  margin-bottom: 0.85rem;
+}
+
+.cat-stamp {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  color: #C9A84C;
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.05em;
+}
+
+.cat-stamp-label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: #bbb;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.75rem;
+}
+
+.receipt-date {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: #bbb;
+  letter-spacing: 0.06em;
+}
+
+/* ─── 체크아웃 버튼 영역 ─── */
+.checkout-actions {
+  margin-top: 1.75rem;
+  display: flex;
+  gap: 0.75rem;
+  padding-bottom: 2rem;
+}
+
+.btn-secondary {
+  padding: 0.68rem 1.4rem;
+  background: var(--gold);
+  border: none;
+  color: var(--navy);
+  font-family: var(--font-serif);
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-secondary:hover { opacity: 0.82; }
+
+.btn-ghost {
+  padding: 0.68rem 1.4rem;
+  background: transparent;
+  border: 1px solid rgba(245, 240, 232, 0.28);
+  color: rgba(245, 240, 232, 0.55);
+  font-family: var(--font-serif);
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-ghost:hover {
+  border-color: rgba(245, 240, 232, 0.6);
+  color: var(--cream);
+}
+
+/* ══════════════════════════════════════
+   CAT IDLE ANIMATIONS
+══════════════════════════════════════ */
+@keyframes idle-breathe {
+  0%, 100% { transform: scale(1)     translateY(0); }
+  50%       { transform: scale(1.022) translateY(-3px); }
+}
+
+@keyframes tail-wag {
+  0%, 100% { transform: rotate(0deg)    translateX(0); }
+  33%       { transform: rotate(1.2deg) translateX(2px); }
+  66%       { transform: rotate(-1.2deg) translateX(-2px); }
+}
+
+#scene-stay.active #cat-ascii-main {
+  animation: idle-breathe 3.8s ease-in-out infinite;
+}
+
+#scene-stay.active #cat-body {
+  animation: tail-wag 2.2s ease-in-out infinite;
+}
+
+/* ══════════════════════════════════════
+   CAT INTERACTION FEEDBACK
+══════════════════════════════════════ */
+@keyframes cat-bounce {
+  0%   { transform: scale(1)    translateY(0); }
+  28%  { transform: scale(0.86) translateY(5px); }
+  60%  { transform: scale(1.06) translateY(-6px); }
+  80%  { transform: scale(0.97) translateY(2px); }
+  100% { transform: scale(1)    translateY(0); }
+}
+
+.cat-bounce #cat-ascii-main,
+.cat-bounce #cat-body {
+  animation: cat-bounce 0.32s ease-out both !important;
+}
+
+/* ══════════════════════════════════════
+   PRINT — 영수증 저장 (Ctrl+P / window.print)
+══════════════════════════════════════ */
+@media print {
+  body::before       { display: none; }
+  .scene             { display: none !important; }
+
+  #scene-checkout {
+    display:    flex !important;
+    position:   static !important;
+    opacity:    1 !important;
+    visibility: visible !important;
+    padding:    0 !important;
+    background: #fff;
+    min-height: unset;
+  }
+
+  .receipt-paper {
+    box-shadow: none;
+    animation:  none !important;
+    clip-path:  none !important;
+    width:      260px;
+    margin:     0 auto;
+  }
+
+  /* 절취 구멍은 인쇄 시 흰 배경이므로 숨김 */
+  .perforation::before,
+  .perforation::after { background: #fff; }
+
+  .checkout-actions { display: none !important; }
+}
