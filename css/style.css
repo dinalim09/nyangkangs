@@ -206,10 +206,88 @@ body::before {
   padding: 0;
 }
 
+#bg-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  transition: opacity 0.25s ease-in-out;
+}
+
+#bg-1 { background-image: url('../bg-1.png'); opacity: 1; }
+#bg-2 { background-image: url('../bg-2.png'); opacity: 0; }
+#bg-3 { background-image: url('../bg-3.png'); opacity: 0; }
+
+#bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(13,27,42,0.62) 0%,
+    rgba(13,27,42,0.28) 45%,
+    rgba(13,27,42,0.72) 100%
+  );
+  pointer-events: none;
+}
+
+/* 조기 종료 버튼 — 소리 아이콘 바로 아래 */
+.btn-early-exit {
+  position: absolute;
+  top: 3.8rem;          /* btn-mute(top:0.9rem + height:38px) + 8px 여백 */
+  right: 1rem;
+  z-index: 25;
+  background: rgba(13, 27, 42, 0.48);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(245, 240, 232, 0.28);
+  border-radius: 2px;
+  color: rgba(245, 240, 232, 0.58);
+  font-family: var(--font-serif);
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  padding: 0.38rem 0.7rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+.btn-early-exit:hover {
+  background: rgba(13, 27, 42, 0.68);
+  border-color: rgba(245, 240, 232, 0.55);
+  color: rgba(245, 240, 232, 0.88);
+}
+
+/* BGM 토글 버튼 */
+.btn-mute {
+  position: absolute;
+  top: 0.9rem;
+  right: 1rem;
+  z-index: 20;
+  background: rgba(13,27,42,0.55);
+  border: 1px solid rgba(201,168,76,0.32);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color 0.2s;
+}
+.btn-mute:hover { border-color: var(--gold); }
+
 /* ─── Timer bar ─── */
 #timer-bar-wrap {
   width: 100%;
-  padding: 1rem 1.5rem 0.6rem;
+  padding: 1rem 3.8rem 0.6rem 1.5rem; /* 우측: BGM 버튼 공간 확보 */
   display: flex;
   align-items: center;
   gap: 0.8rem;
@@ -237,9 +315,10 @@ body::before {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   color: var(--gold);
-  letter-spacing: 0.12em;
-  min-width: 3rem;
+  letter-spacing: 0.08em;
+  min-width: 5.5rem;
   text-align: right;
+  image-rendering: pixelated;
 }
 
 /* ─── Cat stage ─── */
@@ -249,40 +328,67 @@ body::before {
   align-items: center;
   justify-content: center;
   width: 100%;
-  position: relative;  /* Matter.js canvas anchor */
+  position: relative;
   touch-action: none;
   overflow: hidden;
 }
 
 #cat-container {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   user-select: none;
   -webkit-user-select: none;
   cursor: pointer;
   touch-action: none;
-  padding: 3rem;
+  padding: 2rem;
   position: relative;
-  z-index: 1;          /* ASCII art above physics canvas */
+  z-index: 1;
+  transition: transform 0.8s ease-in-out;
 }
 
-#cat-ascii-main {
-  font-family: var(--font-mono);
-  font-size: clamp(2rem, 9vw, 3.2rem);
-  color: var(--gold-light);
-  line-height: 1.3;
-  transition: transform 0.12s, color 0.18s;
+/* 고양이 전신 컨테이너 (충돌 판정 바운딩 박스) */
+#cat-figure {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter:
+    drop-shadow(0 18px 48px rgba(0,0,0,0.88))
+    drop-shadow(0 6px 14px rgba(0,0,0,0.72));
 }
 
+/* 얼굴 스프라이트 (표정 교체용, z-index 위) */
+#cat-sprite {
+  width: clamp(150px, 48vw, 260px);
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  position: relative;
+  z-index: 2;
+  display: block;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  transition: filter 0.15s;
+}
+
+/* 앉은 자세 몸통 (얼굴 아래 연결, z-index 아래) */
 #cat-body {
-  font-family: var(--font-mono);
-  font-size: clamp(1rem, 4.5vw, 1.6rem);
-  color: rgba(201, 168, 76, 0.45);
-  letter-spacing: 0.6em;
-  margin-top: 0.25rem;
-  transition: transform 0.12s;
+  width: clamp(130px, 42vw, 225px);
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  position: relative;
+  z-index: 1;
+  margin-top: -13%;
+  display: block;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
 }
 
-/* ─── Status popups ─── */
+/* ─── Status popups (픽셀 이모지) ─── */
 #popup-layer {
   position: fixed;
   inset: 0;
@@ -292,38 +398,99 @@ body::before {
 
 .status-popup {
   position: absolute;
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  font-weight: bold;
-  color: var(--gold);
-  text-shadow: 0 0 10px rgba(201, 168, 76, 0.55);
+  font-size: 1.9rem;
+  image-rendering: pixelated;
   white-space: nowrap;
-  animation: popup-float 1.25s ease-out forwards;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
+  animation: popup-float 1.3s ease-out forwards;
   pointer-events: none;
 }
 
 @keyframes popup-float {
-  0%   { opacity: 1;   transform: translateY(0)      scale(1); }
-  55%  { opacity: 1;   transform: translateY(-1.8rem) scale(1.08); }
-  100% { opacity: 0;   transform: translateY(-3.2rem) scale(0.88); }
+  0%   { opacity: 1;   transform: translateY(0)       scale(1); }
+  50%  { opacity: 1;   transform: translateY(-2.2rem)  scale(1.15); }
+  100% { opacity: 0;   transform: translateY(-4rem)    scale(0.85); }
 }
 
-/* ─── Interaction hint ─── */
-#interaction-hint {
-  width: 100%;
-  padding: 0.9rem 1.5rem;
+/* ─── Item bar ─── */
+#item-bar {
+  width: calc(100% - 2rem);
+  margin: 0 1rem 0.9rem;
+  padding: 0.6rem 1.5rem 0.7rem;
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 0.55rem;
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  color: rgba(245, 240, 232, 0.38);
+  align-items: flex-end;
+  gap: 2.5rem;
+  flex-shrink: 0;
+  z-index: 10;
 }
 
-.hint-sep {
-  color: var(--gold-dark);
-  opacity: 0.7;
+.item-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.28rem;
+  background: transparent;
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem 0.4rem;
+  cursor: pointer;
+  transition: transform 0.18s var(--ease-out-expo),
+              border-color 0.18s,
+              box-shadow 0.18s;
+  color: rgba(245, 240, 232, 0.42);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.item-btn img {
+  width: 34px;
+  height: 34px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  pointer-events: none;
+  display: block;
+}
+
+.item-label {
+  font-family: var(--font-serif);
+  font-size: 0.54rem;
+  letter-spacing: 0.12em;
+  pointer-events: none;
+}
+
+.item-btn.active {
+  transform: translateY(-7px);
+  border-color: rgba(201, 168, 76, 0.6);
+  box-shadow: 0 0 10px rgba(201, 168, 76, 0.30),
+              0 0 22px rgba(201, 168, 76, 0.12);
+  color: rgba(245, 240, 232, 0.88);
+}
+
+.item-btn:hover:not(.active) {
+  transform: translateY(-2px);
+  border-color: rgba(201, 168, 76, 0.28);
+  color: rgba(245, 240, 232, 0.6);
+}
+
+/* ─── Laser dot ─── */
+#laser-dot {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, #ff5040 0%, #cc1010 55%, transparent 100%);
+  border-radius: 50%;
+  pointer-events: none;
+  display: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: box-shadow 0.3s;
+}
+
+#laser-dot.bloom {
+  box-shadow: 0 0 6px 3px  rgba(255, 60, 40, 0.85),
+              0 0 18px 8px  rgba(255, 80, 40, 0.45),
+              0 0 36px 18px rgba(255, 50, 50, 0.20);
 }
 
 /* ══════════════════════════════════════
@@ -552,41 +719,33 @@ body::before {
 }
 
 /* ══════════════════════════════════════
-   CAT IDLE ANIMATIONS
+   CAT SPRITE ANIMATIONS
 ══════════════════════════════════════ */
 @keyframes idle-breathe {
   0%, 100% { transform: scale(1)     translateY(0); }
-  50%       { transform: scale(1.022) translateY(-3px); }
+  50%       { transform: scale(1.025) translateY(-4px); }
 }
 
-@keyframes tail-wag {
-  0%, 100% { transform: rotate(0deg)    translateX(0); }
-  33%       { transform: rotate(1.2deg) translateX(2px); }
-  66%       { transform: rotate(-1.2deg) translateX(-2px); }
+@keyframes cat-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
 }
 
-#scene-stay.active #cat-ascii-main {
-  animation: idle-breathe 3.8s ease-in-out infinite;
-}
-
-#scene-stay.active #cat-body {
-  animation: tail-wag 2.2s ease-in-out infinite;
-}
-
-/* ══════════════════════════════════════
-   CAT INTERACTION FEEDBACK
-══════════════════════════════════════ */
 @keyframes cat-bounce {
   0%   { transform: scale(1)    translateY(0); }
-  28%  { transform: scale(0.86) translateY(5px); }
-  60%  { transform: scale(1.06) translateY(-6px); }
+  28%  { transform: scale(0.86) translateY(6px); }
+  60%  { transform: scale(1.08) translateY(-8px); }
   80%  { transform: scale(0.97) translateY(2px); }
   100% { transform: scale(1)    translateY(0); }
 }
 
-.cat-bounce #cat-ascii-main,
-.cat-bounce #cat-body {
-  animation: cat-bounce 0.32s ease-out both !important;
+#scene-stay.active #cat-figure {
+  animation: idle-breathe 3.8s ease-in-out infinite,
+             cat-float 5.5s ease-in-out infinite;
+}
+
+.cat-bounce #cat-figure {
+  animation: cat-bounce 0.34s ease-out both !important;
 }
 
 /* ══════════════════════════════════════

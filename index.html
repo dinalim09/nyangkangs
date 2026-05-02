@@ -44,20 +44,28 @@
   ════════════════════════════════ -->
   <section id="scene-stay" class="scene">
 
+    <div id="bg-container">
+      <div class="bg-layer" id="bg-1"></div>
+      <div class="bg-layer" id="bg-2"></div>
+      <div class="bg-layer" id="bg-3"></div>
+      <div id="bg-overlay"></div>
+    </div>
+
+    <!-- BGM 토글 -->
+    <button id="btn-mute" class="btn-mute" aria-label="음소거 토글">🔊</button>
+
     <!-- 타이머 바 -->
     <div id="timer-bar-wrap">
       <div id="timer-bar"></div>
-      <span id="timer-label">03:00</span>
+      <span id="timer-label">🐾 03:00</span>
     </div>
 
     <!-- 고양이 인터랙션 영역 -->
     <div id="cat-stage">
       <div id="cat-container">
-        <div id="cat-ascii-main" class="cat-ascii">
-          ( ˘ ᆺ ˘ )
-        </div>
-        <div id="cat-body">
-          ∫  ∫
+        <div id="cat-figure">
+          <img id="cat-sprite" src="img/cat_idle.png" alt="고양이" draggable="false">
+          <img id="cat-body"   src="img/cat_body.png" alt="" draggable="false">
         </div>
       </div>
     </div>
@@ -65,14 +73,27 @@
     <!-- 상태 팝업 (JS가 동적 생성) -->
     <div id="popup-layer" aria-live="polite"></div>
 
-    <!-- 하단 힌트 -->
-    <div id="interaction-hint" class="glass">
-      <span>쓰다듬기</span>
-      <span class="hint-sep">·</span>
-      <span>빠른 터치</span>
-      <span class="hint-sep">·</span>
-      <span>꾹 누르기</span>
+    <!-- 하단 아이템 바 -->
+    <div id="item-bar" class="glass">
+      <button class="item-btn" id="item-1-btn" title="츄르">
+        <img src="img/item-1.png" alt="츄르" draggable="false">
+        <span class="item-label">츄르</span>
+      </button>
+      <button class="item-btn" id="item-2-btn" title="뜨개실">
+        <img src="img/item-2.png" alt="뜨개실" draggable="false">
+        <span class="item-label">뜨개실</span>
+      </button>
+      <button class="item-btn" id="item-3-btn" title="레이저">
+        <img src="img/item-3.png" alt="레이저" draggable="false">
+        <span class="item-label">레이저</span>
+      </button>
     </div>
+
+    <!-- 레이저 포인터 도트 -->
+    <div id="laser-dot"></div>
+
+    <!-- 조기 종료 -->
+    <button id="btn-early-exit" class="btn-early-exit">인간 세상 재진입</button>
 
   </section>
 
